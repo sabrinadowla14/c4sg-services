@@ -1,0 +1,149 @@
+<div class="page-title clearfix">
+  <h1>Organization</h1>
+</div>
+<div class="container">
+  <div class="row main-row">
+    <!-- Left Panel: Organization -->
+    <div class="col s12 m8 l8" id="left-col">
+      <div class="content  sidebar-wrapper" *ngIf="organization">
+        <div class="row single-info">
+          <div class="col s6 m3 l3">
+            <div class="info-avatar z-depth-2" *ngIf="organization.logoUrl"><img [src]="organization.logoUrl"></div>
+            <div class="info-avatar z-depth-2" *ngIf="!organization.logoUrl"><img [src]="constantsService.defaultLogo"></div>
+          </div>
+          <div class="col s12 m9 l9">
+            <div class="row">
+              <div class="col s12">
+                <h1 class="content-title" *ngIf="organization">{{organization.name}}</h1>
+              </div>
+              <div class="col s12" *ngIf="organization.websiteUrl">
+                <a [href]="organization.websiteUrl" target="_blank">Website: {{pad(organization.websiteUrl, "&nbsp;", 2)}}</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s12 l7">
+                <div class="row">
+                  <div class="col s12">Category: {{categoryName}}</div>
+                  <div class="col s12">Location:
+                    <span class="state" *ngIf="organization.state">{{pad(organization.state, "&nbsp;", 1)}}, </span>
+                    <span class="state" *ngIf="organization.country">{{getCountryName(organization.country)}}</span>
+                    <!--<span class="state" *ngIf="!organization.state && organization.country">
+                      {{pad(organization.country, "&nbsp;", 1)}}, </span>-->
+                  </div>
+                </div>
+              </div>
+              <div class="right">
+                <div class="row" *ngIf="organization.status === 'P'">
+                  <div class="col s12">
+                    <div class="project-marked">
+                      <i class="material-icons icon applied-symbol">done</i>
+                      <!--<svg class="icon">
+                        <use xlink:href="../../assets/applied-bookmarked-sprite.svg#applied-symbol"></use>
+                      </svg>-->
+                      <span>Pending Approval</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col m12">
+            <br>
+            <div class="info-title">Introduction</div>
+            <div>
+                <pre class="info-description">{{ organization.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12 action-btns">
+              <a class="btn-back" (click)="goBack()"><i class="mdi mdi-arrow-left-bold-circle mdi-24px left"></i>Back to Organizations</a>
+              <a class="btn" *ngIf="displayEdit" (click)="edit()">Edit</a>
+              <a class="btn" *ngIf="displayDelete" (click)="delete()">Delete</a>
+              <button class="btn waves-effect waves-light" *ngIf="displayApprove" (click)="approve()">Approve</button>
+              <button class="btn waves-effect waves-light" *ngIf="displayApprove" (click)="decline()">Decline</button>
+            </div>
+          </div>
+          <br>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Projects from the organization -->
+    <div class="col s12 m4 l4" id="right-col">
+      <div class="sidebar">
+        <div class="section" *ngIf="projects">
+
+          <div class="section-body-organization" *ngIf="authService.authenticated()">
+            <h4>Contact</h4>
+            <div class="card">
+              <div class="card-content">
+                <div class="row single-info" *ngIf="user">
+                  <div class="col m4">
+                    <my-user-avatar-small [user]="user"></my-user-avatar-small>
+                  </div>
+                  <div class="col m8" *ngIf="user">
+                     <p class='user-name'>
+                       <i class="material-icons icon-tiny">person</i>
+                      <span *ngIf="user.firstName && user.publishFlag"  [routerLink]="['/user/view',user.id]">{{user.firstName + ' ' + user.lastName}}</span>
+                     </p>
+                     <p class='user-name'>
+                      <span *ngIf="user.firstName && !user.publishFlag">{{user.firstName}},{{user.lastName}}</span>
+                    </p>
+                    <p><i class="material-icons icon-tiny">title</i><span class="left-align"> {{user.title}} </span></p>
+                    <p><i class="material-icons icon-tiny">phone</i><span class="left-align"> {{user.phone}}</span></p>
+                    <p><i class="material-icons icon-tiny">email</i><span class="left-align"> {{user.email}}</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 *ngIf="projects">Projects ({{projects.length}})</h4>
+          <div class="section-body-project" *ngIf="!projects">
+              <ul>
+                  <li class="card-wrapper">
+                      <div class="card">
+                          <div class="card-content">
+                            <div class="row single-info">
+                            </div>
+                          </div>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+          <div class="section-body-project" *ngIf="projects?.length == 0">
+              <ul>
+                  <li class="card-wrapper">
+                      <div class="card">
+                          <div class="card-content">
+                            <div class="row single-info">
+                            </div>
+                          </div>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+          <div class="section-body-project" *ngIf="projects?.length > 0">
+            <div class="items-list-wrapper">
+              <ul>
+                <li class="card-wrapper" *ngFor="let pr of projects.slice(0,5)">
+                  <my-project-card-small [project]="pr"></my-project-card-small>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4>Confirm Organization Deletion</h4>
+    <p>Are you sure you want to delete the organization?</p>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="closeModal()">No</a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="delete()">Yes</a>
+  </div>
+</div>

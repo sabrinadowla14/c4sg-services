@@ -1,0 +1,57 @@
+@import "../../_style/app.theme";
+
+.card-avatar, .card-avatar-content {
+  border-radius: 50% !important;
+}
+
+.mg-top-10px{
+  margin-top: 10px;
+}
+
+.not-active {
+  pointer-events: none;
+  cursor: default;
+  color: #9F9F9F !important;
+}
+
+.names {
+  font-size: 2em;
+  color: $secondary-bg-color;
+  font-weight: bold;
+}
+
+.location {
+  line-height: 1.5em;
+  //padding-left: 1em;
+  font-size: 1em;
+}
+
+.user-title {
+  display:table-cell;
+  vertical-align: middle;
+  h5 {
+    font-weight: bold;
+  }
+}
+
+.username {
+  line-height: 1.5em;
+  text-align: center;
+  font-size: 1em;
+}
+
+#right-col, .sidebar{
+  border-bottom: none;
+  padding-bottom: 0px;
+}
+
+.btn-back {
+  background-color: white;
+  color: $secondary-bg-color;  
+  line-height:24px;
+  vertical-align:middle;
+  text-transform: uppercase;
+  cursor: pointer;
+  // border: 2px solid $secondary-bg-color;
+  // @include button-font;
+}

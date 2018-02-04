@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-content">
+    <div class="row single-info">
+      <div class="col s4 m4">
+        <div class="info-avatar">
+          <my-project-image [project]="project"></my-project-image>
+        </div>
+      </div>
+      <div class="col m8">
+        <div class="name">
+          <a [routerLink]="['/project/view/', project.id]">{{project.name}}</a>
+        </div>
+        <my-tags [tags]="project.skills" [max]="3" moreUrl="project/view/{{project.id}}"></my-tags>
+      </div>
+    </div>
+    <p class="description" *ngIf="project && project.description">{{ project && project.description | slice:0:100 }} ...</p>
+  </div>
+</div>

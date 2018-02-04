@@ -1,0 +1,79 @@
+<div class="page-title-center">
+  <h1>Consultants</h1>
+</div>
+
+<div class="container ">
+  <form class="white z-depth-2" [formGroup]="consultantForm" (ngSubmit)="onSubmit()">
+    <div class="row white">
+      <div class="col s2 m2 l2 center-align">
+        <img id="askimage" class="responsive-img" [src]="'../../assets/ask.png'">
+      </div>
+      <div class="col s10 m10 l10 flow-text">
+        <p>HAVE A QUESTION?<br>NEED TO TALK TO A TECH OR DESIGN EXPERT?</p>
+        <p>Leave your request below and our consultant will contact you within 3 days.</p>
+      </div>
+    </div>
+
+    <div class="row white">
+      <div class="input-field col s12">
+        <label id="subjectarea">Subject Areas</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 skills-tag-wrapper">
+        <ul class="ulSubjectArea">
+          <li *ngFor="let subjectArea of subjectAreas"
+              [ngClass]="{ 'subjectSelected': isSubjectSelected(subjectArea) }"
+              class="chip"
+              (click)="select($event, subjectArea)">
+            {{ subjectArea }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s12">
+        <input formControlName="email" type="email" required>
+        <label for="email">Email *</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea formControlName="description"
+                  class="materialize-textarea"
+                  required
+                  [maxLength]="descMaxLength"
+                  (click)="onCountCharDescription()"
+                  (input)="onCountCharDescription()"
+                  (focus)="onFocusDescription()"
+                  (blur)="onBlurDescription()">
+        </textarea>
+        <label for="description" id="desc-label">
+          Question *
+          <span *ngIf="descFieldFocused"> ({{descValueLength}}/{{descMaxLength}})</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="submitbtn" class="col s2">
+        <button type="submit" class="btn waves-effect waves-light">Submit</button>
+      </div>
+      <div *ngIf="isSent" class="col s10 thanks">
+        <p>Thanks! We'll get back to you very soon.</p>
+      </div>
+    </div>
+  </form>
+
+  <div id="last-section" class="row white z-depth-2">
+    <div class="col s2 m2 center-align">
+      <i class="medium material-icons">person_outline</i>
+    </div>
+    <div class="col s10 m10 l10 flow-text">
+      <p>WANT TO EXTEND YOUR VOLUNTEERING EXPERIENCE AND BECAME A TECHNICAL CONSULTANT?</p>
+      <p>Contact us for more info.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,143 @@
+<div class="page-title clearfix">
+  <h1>Volunteers</h1>
+</div>
+<div class="container">
+  <div class="row main-row">
+    <div class="col m4" id="left-col">
+      <div class="sidebar-wrapper">
+        <form class="sidebar" [formGroup]="filterForm" (ngSubmit)="getUsers(1)">
+          <div class="row">
+            <div class="col s12">
+              <div class="section">
+                <div class="section-body-keyword">
+                  <h4 id="keyword-title" class="col m3 s12">Keyword</h4>
+                  <input id="keyword" class="col m6 s9" name="keyword" materialize="autocomplete" type="search" formControlName="keyword" placeholder="   keyword">
+                  <button type="search" class="col m3 s3" class="keyword-field__btn waves-effect waves-light" id="keyword-button">
+                    <i class="material-icons transparent" id="keyword-icon">search</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <div class="section">
+                <h4>Categories</h4>
+                <div class="section-body-projects">
+                  <div class="project-list">
+                    <ul *ngIf="jobTitles" formArrayName="jobTitles">
+                      <li *ngFor="let jobTitle of jobTitlesShowed, let i = index">
+                        <input class="filled-in" type="checkbox" [id]="jobTitle.jobtitle" [value]="jobTitle.id" [formControlName]="i">
+                        <label [for]="jobTitle.jobtitle">{{jobTitle.jobtitle}}</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <div class="section">
+                <h4>Countries</h4>
+                <div class="section-body-projects">
+                  <div class="skills-list" myScrollSkills >
+                    <ul *ngIf="countries" formArrayName="countries">
+                      <li *ngFor="let country of countriesShowed, let i = index">
+                        <input class="filled-in" type="checkbox" [id]="country.code" [value]="country.name" [formControlName]="i">
+                        <label [for]="country.code">{{country.name}}</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <div class="section">
+                <h4>Skills</h4>
+                <div class="section-body-skills">
+                  <div class="skills-list" myScrollSkills >
+                    <ul *ngIf="skills" formArrayName="skills">
+                      <li *ngFor="let skill of skillsShowed, let i = index">
+                        <input class="filled-in" type="checkbox" [id]="skill.name" [formControlName]="i">
+                        <label [for]="skill.name">{{skill.name}}</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col m8 s12" id="right-col">
+      <div class="content" *ngIf="users">
+        <div class="row">
+          <h4 class="content-title">{{paginationConfig.totalItems | i18nPlural: {'=0': 'No volunteers', '=1': '1 volunteer', 'other': '# volunteers'} }} found</h4>
+          <div class="items-list-wrapper">
+            <ul class="card-list" *ngIf="users">
+              <li class="card-wrapper" *ngFor="let user of users | paginate: paginationConfig">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-avatar-wrapper">
+                      <my-user-avatar [user]="user"></my-user-avatar>
+                    </div>
+                    <div class="card-info">
+                      <div class="card-header">
+                        <div class="row">
+                          <div class="card-metainfo col m6">
+                            <div class='name'>
+                              <!--   <span class='name' [routerLink]="['/user/view',user.id]">{{user.firstName + ' ' + user.lastName}}</span>-->
+                              <a class='name' href="user/view/{{user.id}}">
+                              {{user.firstName + ' ' + user.lastName}}</a>
+                            </div>
+                          </div>
+                          <div style="line-height:50px" class="card-metainfo col m6">
+                            <div class="projects">
+                              <span class="card-location float: right">
+                                  <i style="vertical-align: middle" class="small material-icons">assignment</i>
+                                  <ng-template [ngIf]="user.projects"> 
+                                    <ng-template [ngIf]="user.projects.length == 0">0 Projects</ng-template>
+                                    <ng-template [ngIf]="user.projects.length == 1">1 Project</ng-template>
+                                    <ng-template [ngIf]="user.projects.length > 1">{{user.projects.length}} Projects</ng-template>
+                                  </ng-template>
+                                  <ng-template [ngIf]="!user.projects">
+                                    0 Projects
+                                  </ng-template>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="card-metainfo col m6">
+                            <p class="user-title">{{user.title}}</p>
+                          </div>
+                          <div class="card-metainfo col m6 user-country">
+                            <!--<span class="card-location float: right" *ngIf="user.country">{{user.country}}</span>-->
+                            <span class="card-location float: right" *ngIf="user.state">{{user.state}}, {{user.country}}</span>
+                            <span class="card-location float: right" *ngIf="!user.state">
+                            {{user.country}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <my-tags [tags]="user.skills" [max]="5" moreUrl="user/view/{{user.id}}"></my-tags>
+                      <p class="description text-overflow" *ngIf="user && user.introduction">{{ user && user.introduction }}</p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row">
+          <div class="pagination">
+            <my-pagination-controls (pageChange)="getUsers($event)" id="usersPages"></my-pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

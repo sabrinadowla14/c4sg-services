@@ -1,0 +1,50 @@
+<div class="page-title-center">
+  <h1>Our Top Volunteers</h1>
+</div>
+<div class="container content">
+  <div class="row white z-depth-2">
+    <div class="col s10 offset-s1">
+      <div class="thanks">
+        Together, we are making the world a better place.<br>We appreciate the help of all our volunteers!<br>
+        <h2>THANK YOU!</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="row users" *ngFor="let i of rowsArray" >
+    <div class="col s3" *ngFor="let hero of heroes | slice:(i*4):(i+1)*4">
+      <div class="user  white z-depth-2">
+        <div *ngIf="hero.avatarUrl">
+          <img [src]="hero.avatarUrl" class="avatar">
+        </div>
+        <div class="avatar-circle" *ngIf="!hero.avatarUrl">
+          <span class="initials">{{hero.firstName | slice:0:1}}{{hero.lastName | slice:0:1}}</span>
+        </div>
+        <div class="mg-top-10px content-title ">{{hero.firstName}}</div>
+        <div class="user-title">{{hero.title}}</div>
+        <div class="location clearfix">
+          <span class="label">Location</span>
+          <!-- country is mandatory field for user, already has value-->
+          <span class="label-content">{{hero.country}}</span>
+        </div>
+        <div class="badges clearfix">
+          <span class="label">Badges</span>
+          <span class="label-content"><a> <i class="material-icons" >stars</i>&nbsp;{{hero.badgeCount}}</a>
+          <div id="projects">
+            <span class="name" *ngIf="hero.project">
+              <h5 *ngFor="let project of hero.project " [routerLink]="['/project/view/', project.id]">{{project.name}}</h5>
+            </span>
+          </div>
+          </span>
+        </div><br/>
+        <!--<div class="skills-tag-wrapper" >
+          <ul *ngIf="hero.skill">
+            <li class="chip" *ngFor="let skill of hero.skill ">{{skill}}</li>
+          </ul>
+        </div>-->
+        <button type="button" class="btn waves-effect waves-light"  [disabled]="hero.publishFlag ==='N' " [routerLink]="['/user/view',hero.userId]">View Profile</button>
+      </div>
+    </div>
+  </div>
+
+</div>
